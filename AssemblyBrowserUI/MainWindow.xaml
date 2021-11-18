@@ -1,0 +1,41 @@
+﻿<Window x:Class="AssemblyBrowserUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AssemblyBrowserUI"
+        xmlns:model="clr-namespace:AssemblyBrowserCore.Model;assembly=AssemblyBrowserLibrary"
+        mc:Ignorable="d"
+        Title="Assembly Browser" Height="370" Width="525" ResizeMode="NoResize">
+    <Window.DataContext>  
+        <local:ViewModel/>  
+    </Window.DataContext>
+    <StackPanel Orientation="Vertical">
+        <Menu>
+            <MenuItem Header="File">
+                <MenuItem Header="Open" Command="{Binding OpenFileCommand}" FontSize="13" Height="20" Margin="0,0,-1.8,0"/>
+            </MenuItem>
+        </Menu>
+        <TextBlock Text="{Binding FilePath}"></TextBlock>
+        <ScrollViewer Height="300">
+            <TreeView ItemsSource="{Binding Namespaces}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Classes}" DataType="model:NamespaceMetadata">
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Path=Members}" DataType="model:ClassMetadata">
+                                <TextBlock Text="{Binding Name}"></TextBlock>
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <DataTemplate DataType="model:ClassMemberMetadata">
+                                        <TextBlock Text="{Binding StringRepresentation}"></TextBlock>
+                                    </DataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                            </HierarchicalDataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+        </ScrollViewer>
+    </StackPanel>
+</Window>
